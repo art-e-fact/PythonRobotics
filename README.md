@@ -1,3 +1,78 @@
 # PythonRobotics + Artefacts
 
-Algorithm demos from `PythonRobotics`, deployed on Turtlebot3, parametrized tests with Artefacts
+Algorithm demos from `PythonRobotics`, parametrized tests with Artefacts, deployed on Turtlebot3.
+
+## Progress
+- [ ] Localization
+  - [ ] Extended Kalman Filter
+  - [ ] Ensemble Kalman Filter
+  - [ ] Unscented Kalman Filter
+  - [ ] Histogram Filter
+  - [ ] Particle Filter 
+- [ ] Mapping
+  - [ ] Gaussian Grid Map
+  - [ ] Normal Distance Transform (NDT)
+  - [ ] Ray Casting Grid Map
+  - [ ] Lidar to Grid Map
+  - [ ] Pointcloud Sampling
+  - [ ] K-means Object Clustering
+  - [ ] Object Shape Recognition using Circle Fitting
+  - [ ] Object Shape Recognition using Rectangle Fitting
+  - [ ] Normal Vector Estimation
+  - [ ] Distance Map 
+- [ ] SLAM
+  - [ ] Iterative Closest Point (ICP) Matching
+  - [ ] EKF SLAM
+  - [ ] FastSLAM 1.0
+  - [ ] FastSLAM 2.0
+  - [ ] Graph-based SLAM 
+- [ ] Path Planning
+  - [ ] Dynamic Window Approach
+  - [ ] Bug Planner
+  - [ ] Grid-based Search
+  - [ ] Time-based Grid Search
+  - [ ] Model Predictive Trajectory Generator
+  - [ ] State Lattice Planning
+  - [ ] Probabilistic Road-Map (PRM) Planning
+  - [ ] Visibility Road-Map Planner
+  - [ ] Voronoi Road-Map Planning
+  - [ ] Rapidly-exploring Random Trees (RRT)
+  - [ ] Particle Swarm Optimization Path Planning
+  - [ ] Cubic Spline Planning
+  - [ ] B-Spline Planning
+  - [ ] Catmull-Rom Spline Planning
+  - [ ] Clothoid Path Planning
+  - [ ] Eta^3 Spline Path Planning
+  - [ ] Bezier Path Planning
+  - [ ] Quintic Polynomials Planning
+  - [ ] Dubins Path Planning
+  - [ ] Reeds Shepp Planning
+  - [ ] LQR-based Path Planning
+  - [ ] Hybrid A Star
+  - [ ] Optimal Trajectory in a Frenet Frame
+  - [ ] Coverage Path Planner
+  - [ ] Elastic Bands
+- [ ] Path Tracking
+  - [ ] Pure Pursuit Tracking
+  - [ ] Standley Control
+  - [ ] Rear Wheel Feedback Control
+  - [ ] Linear-Quadratic Regulator (LQR) Steering Control
+  - [ ] Linear-Quadratic Regulator (LQR) Speed and Steering Control
+  - [ ] Model Predictive Speed and Steering Control
+  - [ ] Nonlinear Model Predictive Control with C-GMRES
+  - [ ] Move-to-a-Pose Control 
+- [ ] Arm navigation
+  - [ ] Two-joint Arm-to-Point control
+  - [ ] N-Joint Arm-to-Point control
+  - [ ] Arm Navigation With Obstacle Avoidance 
+- [ ] Aerial Navigation
+  - [ ] Drone 3d Trajectory Following
+  - [ ] Rocket Powered Landing  
+- [ ] Bipedal
+  - [ ] Bipedal Planner 
+- [ ] Inverted Pendulum
+  - [ ] LQR Control
+  - [ ] MPC Control 
+- [ ] Mission Planning
+  - [ ] State Machine
+  - [ ] Behavior Tree 
