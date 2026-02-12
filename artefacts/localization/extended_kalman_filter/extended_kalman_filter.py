@@ -41,15 +41,15 @@ def plot_covariance_ellipse(xEst, PEst):
     py = np.array(fx[1, :] + xEst[1, 0]).flatten()
     plt.plot(px, py, "--r")
 
-def motion_model(x, u):
+def motion_model(x, u, dt=DT):
     F = np.array([[1.0, 0, 0, 0],
                   [0, 1.0, 0, 0],
                   [0, 0, 1.0, 0],
                   [0, 0, 0, 0]
                   ])
-    B = np.array([[DT * math.cos(x[2,0]), 0],
-                  [DT * math.sin(x[2,0]), 0],
-                  [0.0, DT],
+    B = np.array([[dt * math.cos(x[2,0]), 0],
+                  [dt * math.sin(x[2,0]), 0],
+                  [0.0, dt],
                   [1.0, 0.0],
                   ])
     x = F.dot(x) + B.dot(u)
@@ -65,12 +65,12 @@ def observation_model(x):
     
     return z
 
-def jacobF(x, u):
+def jacobF(x, u, dt=DT):
     yaw = x[2, 0]
     v = u[0, 0]
     jF = np.array([
-        [1, 0, -v*math.sin(yaw)*DT, math.cos(yaw)*DT],
-        [0, 1, v*math.cos(yaw)*DT, math.sin(yaw)*DT],
+        [1, 0, -v*math.sin(yaw)*dt, math.cos(yaw)*dt],
+        [0, 1, v*math.cos(yaw)*dt, math.sin(yaw)*dt],
         [0, 0, 1, 0],
         [0, 0, 0, 1]
     ])
@@ -83,7 +83,7 @@ def jacobH(x):
     ])
     return jH
 
-def ekf_estimation(xEst, PEst, z, u):
+def ekf_estimation(xEst, PEst, z, u, Q=Q, R=R):
     # predict
     xPred = motion_model(xEst, u)    
     jF = jacobF(xPred, u)
@@ -100,7 +100,7 @@ def ekf_estimation(xEst, PEst, z, u):
     
     return xEst, PEst
 
-def observation(xTrue, xd, u):
+def observation(xTrue, xd, u, Qsim=Qsim, Rsim=Rsim):
     xTrue = motion_model(xTrue, u)
 
     # add noise to gps x,y
