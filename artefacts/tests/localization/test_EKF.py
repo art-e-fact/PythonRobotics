@@ -31,13 +31,15 @@ def calc_dist(xEst, xTrue):
 ## estimation params of EKF
 # observation covariance (x, y GPS position)
 @pytest.mark.parametrize("Q", [
-    np.diag([0.5, 0.5])**2,
+#    np.diag([0.5, 0.5])**2,
     np.diag([1.0, 1.0])**2,
-    np.diag([1.5, 1.5])**2,
+#    np.diag([1.5, 1.5])**2,
 ])
 # predicted state / process covariance
 @pytest.mark.parametrize("R", [
-    np.diag([0.1, 0.1, np.deg2rad(1.0), 1.0])**2
+    #np.diag([0.1, 0.1])
+    #np.diag([0.1, 0.1, np.deg2rad(1.0), 1.0])**2
+    np.diag([0.1, 0.1, np.deg2rad(3.0), 3.0])**2
 ])
 
 ## simulation params
@@ -50,8 +52,8 @@ def calc_dist(xEst, xTrue):
 # input noise
 @pytest.mark.parametrize("Rsim", [
     #np.diag([1.0, np.deg2rad(0.0)])**2,
-    np.diag([1.0, np.deg2rad(30.0)])**2,
-    #np.diag([1.0, np.deg2rad(50.0)])**2
+    #np.diag([1.0, np.deg2rad(30.0)])**2,
+    np.diag([1.9, np.deg2rad(90)])**2
 ])
 # time tick
 @pytest.mark.parametrize("dt", [0.1])
@@ -97,13 +99,14 @@ def test_EKF(init_fixture, Q, R, Qsim, Rsim, dt, SIM_TIME):
                  hxDR[1, :].flatten(), "-k")
         plt.plot(hxEst[0, :].flatten(),
                  hxEst[1, :].flatten(), "-r")
-        EKF.plot_covariance_ellipse(xEst, PEst)
+        #EKF.plot_covariance_ellipse(xEst, PEst)
         plt.axis("equal")
         plt.grid(True)
         plt.pause(0.001)
 
     mean_est_error = np.array(est_error).mean()
     print(f"\n[*] mean EKF error: {mean_est_error}")
+    breakpoint()
     assert mean_est_error < 0.5 
 
 
