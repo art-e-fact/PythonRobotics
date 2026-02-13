@@ -7,6 +7,7 @@ import sys
 module_path = os.path.abspath(f"{os.path.dirname(__file__)}/../../localization/extended_kalman_filter/")
 sys.path.append(module_path)
 import extended_kalman_filter as EKF
+from utils.plot import plot_covariance_ellipse
 
 
 @pytest.fixture(scope='module')
@@ -20,7 +21,7 @@ def init_fixture():
     hxEst = xEst
     hxTrue = xTrue
     hxDR = xTrue
-    hz = np.zeros((1,2))
+    hz = np.zeros((2,1))
     
     yield xEst, xTrue, xDR, PEst, hxEst, hxTrue, hxDR, hz
 
@@ -30,16 +31,20 @@ def calc_dist(xEst, xTrue):
 
 ## estimation params of EKF
 # observation covariance (x, y GPS position)
-@pytest.mark.parametrize("Q", [
+@pytest.mark.parametrize("R", [
 #    np.diag([0.5, 0.5])**2,
-    np.diag([1.0, 1.0])**2,
-#    np.diag([1.5, 1.5])**2,
+    #np.diag([1.0, 1.0])**2,
+    np.diag([2.3, 2.3])**2
+    #np.diag([3.5, 3.5])**2,
 ])
 # predicted state / process covariance
-@pytest.mark.parametrize("R", [
+@pytest.mark.parametrize("Q", [
     #np.diag([0.1, 0.1])
-    #np.diag([0.1, 0.1, np.deg2rad(1.0), 1.0])**2
-    np.diag([0.1, 0.1, np.deg2rad(3.0), 3.0])**2
+    np.diag([0.1, 0.1, np.deg2rad(1.0), 1.0])**2
+    #np.diag([0.0001, 0.0001, np.deg2rad(1.0), 2.5])**2
+    #np.diag([0.1, 0.1, np.deg2rad(3.0), 3.0])**2
+    #np.diag([0.1, 0.1, np.deg2rad(60.0), 9])**2
+    #np.diag([0.1, 0.1, np.deg2rad(90.0), 7.0])**2
 ])
 
 ## simulation params
@@ -47,13 +52,15 @@ def calc_dist(xEst, xTrue):
 @pytest.mark.parametrize("Qsim", [
     #np.diag([0.2, 0.2])**2,
     #np.diag([0.5, 0.5])**2,
-    np.diag([0.9, 0.9])**2,
+    np.diag([1.1, 1.1])**2,
 ])
 # input noise
 @pytest.mark.parametrize("Rsim", [
     #np.diag([1.0, np.deg2rad(0.0)])**2,
-    #np.diag([1.0, np.deg2rad(30.0)])**2,
-    np.diag([1.9, np.deg2rad(90)])**2
+    np.diag([1.0, np.deg2rad(30.0)])**2,
+    #np.diag([2.1, np.deg2rad(90)])**2
+    #np.diag([1.9, np.deg2rad(90)])**2
+    #np.diag([2.0, np.deg2rad(30)])**2
 ])
 # time tick
 @pytest.mark.parametrize("dt", [0.1])
@@ -88,25 +95,29 @@ def test_EKF(init_fixture, Q, R, Qsim, Rsim, dt, SIM_TIME):
         hxEst = np.hstack((hxEst, xEst))
         hxDR = np.hstack((hxDR, xDR))
         hxTrue = np.hstack((hxTrue, xTrue))
-        hz = np.vstack((hz, z))
+        hz = np.hstack((hz, z))
 
         # show animations 
         plt.cla()
-        plt.plot(hz[:, 0], hz[:, 1], ".g")
+        # for stopping simulation with the esc key.
+        plt.gcf().canvas.mpl_connect('key_release_event',
+                lambda event: [exit(0) if event.key == 'escape' else None])
+        plt.plot(hz[0, :], hz[1, :], ".g")
         plt.plot(hxTrue[0, :].flatten(),
-                 hxTrue[1, :].flatten(), "-b")
+                    hxTrue[1, :].flatten(), "-b")
         plt.plot(hxDR[0, :].flatten(),
-                 hxDR[1, :].flatten(), "-k")
+                    hxDR[1, :].flatten(), "-k")
         plt.plot(hxEst[0, :].flatten(),
-                 hxEst[1, :].flatten(), "-r")
-        #EKF.plot_covariance_ellipse(xEst, PEst)
+                    hxEst[1, :].flatten(), "-r")
+        plot_covariance_ellipse(xEst[0, 0], xEst[1, 0], PEst)
         plt.axis("equal")
         plt.grid(True)
         plt.pause(0.001)
 
+
     mean_est_error = np.array(est_error).mean()
     print(f"\n[*] mean EKF error: {mean_est_error}")
-    breakpoint()
+    #breakpoint()
     assert mean_est_error < 0.5 
 
 
