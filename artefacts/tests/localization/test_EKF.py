@@ -43,11 +43,13 @@ def calc_dist(xEst, xTrue):
 @pytest.mark.parametrize("Qsim", [
     np.diag([0.2, 0.2])**2,
     np.diag([0.5, 0.5])**2,
-    np.diag([0.8, 0.8])**2,
+    np.diag([0.9, 0.9])**2,
 ])
 # input noise
 @pytest.mark.parametrize("Rsim", [
-    np.diag([1.0, np.deg2rad(30.0)])**2
+    #np.diag([1.0, np.deg2rad(0.0)])**2,
+    np.diag([1.0, np.deg2rad(30.0)])**2,
+    #np.diag([1.0, np.deg2rad(50.0)])**2
 ])
 # time tick
 @pytest.mark.parametrize("dt", [0.1])
@@ -59,6 +61,8 @@ def test_EKF(init_fixture, Q, R, Qsim, Rsim, dt, SIM_TIME):
 
     xEst, xTrue, xDR, PEst, hxEst, hxTrue, hxDR, hz = init_fixture
     
+    est_error = []
+    DR_error = []
     time = 0.0    
     while time <= SIM_TIME:
         time += dt
@@ -66,15 +70,15 @@ def test_EKF(init_fixture, Q, R, Qsim, Rsim, dt, SIM_TIME):
         # using constant input
         u = EKF.calc_input()
         
-        xTrue, z, xDR, ud = EKF.observation(xTrue, xDR, u)
+        xTrue, z, xDR, ud = EKF.observation(xTrue, xDR, u, Qsim=Qsim, Rsim=Rsim)
         
-        xEst, PEst = EKF.ekf_estimation(xEst, PEst, z, ud)
+        xEst, PEst = EKF.ekf_estimation(xEst, PEst, z, ud, Q=Q, R=R)
 
-        est_error = calc_dist(xEst, xTrue)
-        DR_error = calc_dist(xDR, xTrue)
+        est_error.append(calc_dist(xEst, xTrue))
+        DR_error.append(calc_dist(xDR, xTrue))
 
         if round(time,1).is_integer():
-            print(f"[t={time:.2f}] EKF distance = {est_error:.2f} - DR distance = {DR_error:.2f}")
+            print(f"[t={time:.2f}] EKF distance = {est_error[-1]:.2f} - DR distance = {DR_error[-1]:.2f}")
         
         # store data history
         hxEst = np.hstack((hxEst, xEst))
@@ -96,7 +100,9 @@ def test_EKF(init_fixture, Q, R, Qsim, Rsim, dt, SIM_TIME):
         plt.grid(True)
         plt.pause(0.001)
 
-    assert est_error < 0.5
+    mean_est_error = np.array(est_error).mean()
+    print(f"\n[*] mean EKF error: {mean_est_error}")
+    assert mean_est_error < 0.5 
 
 
 
