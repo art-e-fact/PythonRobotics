@@ -32,35 +32,25 @@ def calc_dist(xEst, xTrue):
 ## estimation params of EKF
 # observation covariance (x, y GPS position)
 @pytest.mark.parametrize("R", [
-#    np.diag([0.5, 0.5])**2,
-    #np.diag([1.0, 1.0])**2,
-    np.diag([2.3, 2.3])**2
-    #np.diag([3.5, 3.5])**2,
+    np.diag([1.0, 1.0])**2,
+    #np.diag([2.3, 2.3])**2
 ])
 # predicted state / process covariance
 @pytest.mark.parametrize("Q", [
-    #np.diag([0.1, 0.1])
-    np.diag([0.1, 0.1, np.deg2rad(1.0), 1.0])**2
-    #np.diag([0.0001, 0.0001, np.deg2rad(1.0), 2.5])**2
-    #np.diag([0.1, 0.1, np.deg2rad(3.0), 3.0])**2
-    #np.diag([0.1, 0.1, np.deg2rad(60.0), 9])**2
-    #np.diag([0.1, 0.1, np.deg2rad(90.0), 7.0])**2
+    #np.diag([0.1, 0.1, np.deg2rad(1.0), 1.0])**2 
+    np.diag([0.1, 0.1, np.deg2rad(1.0), 3.])**2
 ])
 
 ## simulation params
 # observation noise
 @pytest.mark.parametrize("Qsim", [
-    #np.diag([0.2, 0.2])**2,
-    #np.diag([0.5, 0.5])**2,
-    np.diag([1.1, 1.1])**2,
+    np.diag([0.5, 0.5])**2,
+    #np.diag([1.1, 1.1])**2,
 ])
 # input noise
 @pytest.mark.parametrize("Rsim", [
-    #np.diag([1.0, np.deg2rad(0.0)])**2,
-    np.diag([1.0, np.deg2rad(30.0)])**2,
-    #np.diag([2.1, np.deg2rad(90)])**2
-    #np.diag([1.9, np.deg2rad(90)])**2
-    #np.diag([2.0, np.deg2rad(30)])**2
+    #np.diag([1.0, np.deg2rad(30.0)])**2,
+    np.diag([2.8, np.deg2rad(30)])**2
 ])
 # time tick
 @pytest.mark.parametrize("dt", [0.1])
