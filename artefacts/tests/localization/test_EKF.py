@@ -31,7 +31,9 @@ def calc_dist(xEst, xTrue):
 ## estimation params of EKF
 # observation covariance (x, y GPS position)
 @pytest.mark.parametrize("Q", [
-    np.diag([1.0, 1.0])**2
+    np.diag([0.5, 0.5])**2,
+    np.diag([1.0, 1.0])**2,
+    np.diag([1.5, 1.5])**2,
 ])
 # predicted state / process covariance
 @pytest.mark.parametrize("R", [
@@ -41,8 +43,8 @@ def calc_dist(xEst, xTrue):
 ## simulation params
 # observation noise
 @pytest.mark.parametrize("Qsim", [
-    np.diag([0.2, 0.2])**2,
-    np.diag([0.5, 0.5])**2,
+    #np.diag([0.2, 0.2])**2,
+    #np.diag([0.5, 0.5])**2,
     np.diag([0.9, 0.9])**2,
 ])
 # input noise
